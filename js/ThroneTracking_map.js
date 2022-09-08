@@ -6,23 +6,21 @@ const locations = [
 ];
 const n = locations.length;
 
-const map = new google.maps.Map(document.getElementById('map'), {zoom: 4});
+let map = new google.maps.Map(document.getElementById('map'), {zoom: 4});
 const infowindow = new google.maps.InfoWindow();
 
 var latSum = 0;
 var lonSum = 0;
-for (let i = 0; i < n; i++) {
+for (i = 0; i < n; i++) {
     const label = locations[i].label;
     const lat = locations[i].lat;
     const lon = locations[i].lon;
-    const position = new google.maps.LatLng(lat, lon);
-    const marker = new google.maps.Marker({position: position,map: map});
-    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-            infowindow.setContent(label);
-            infowindow.open(map, marker);
-        }
-    })(marker, i));
+    const latlon = new google.maps.LatLng(lat, lon);
+    const marker = new google.maps.Marker({position: latlon, map: map});
+    marker.addListener('click', () => {
+        infowindow.setContent(label);
+        infowindow.open(map, marker);
+    });
     latSum += lat;
     lonSum += lon;
 };
@@ -30,3 +28,49 @@ for (let i = 0; i < n; i++) {
 const centerLat = latSum / n;
 const centerLon = lonSum / n;
 map.setCenter(new google.maps.LatLng(centerLat,centerLon));
+
+function showPosition(position) {
+    const label = 'You Are Here'
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const latlon = new google.maps.LatLng(lat, lon);
+    const marker = new google.maps.Marker({position: latlon, map: map});
+    marker.addListener('click', () => {
+        infowindow.setContent(label);
+        infowindow.open(map, marker);
+    });
+    infowindow.setContent(label);
+    infowindow.open(map, marker);
+    locationResult.innerHTML = "Latitude: " + lat + "<br>Longitude: " + lon + "<br>Timestamp:" + position.timestamp;
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            locationResult.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            locationResult.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            locationResult.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            locationResult.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+
+function addCurrentPosition() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        locationResult.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+let locationResult = document.getElementById("locationResult");
+let button = document.getElementById("addMyLocationButton");
+button.addEventListener("click", () => {
+    addCurrentPosition();
+})
