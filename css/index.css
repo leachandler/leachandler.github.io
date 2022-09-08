@@ -11,13 +11,11 @@ h1 {
   font-weight: bold;
   font-style: italic;
 }
-t2 {
-  color: blue;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 300%;
-}
 p {
   border: 2px solid black;
   background-color: white;
   padding: 10px;
+}
+small {
+    font-size: 70%;
 }
