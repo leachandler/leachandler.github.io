@@ -1923,6 +1923,7 @@ input, select, textarea {
 
 	section, article {
 		margin-bottom: 3em;
+        border-radius: 4px;        
 	}
 
 		section > :last-child, section:last-child, article > :last-child, article:last-child {
