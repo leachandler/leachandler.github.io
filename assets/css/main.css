@@ -1980,7 +1980,7 @@ input, select, textarea {
 
                         		dl dd {
                         			margin-left: 2rem;
-                        		}                        
+                        		}
 
 /* Section/Article */
 
@@ -2024,6 +2024,7 @@ input, select, textarea {
 		.image.fit {
 			display: block;
 			width: 100%;
+            border-bottom: none;        
 		}
 
 		.image.featured {
